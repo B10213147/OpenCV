@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1456762122 source:i:\histogram_equalization\main.cpp
+	<iostream>
+	<cv.hpp>
+
