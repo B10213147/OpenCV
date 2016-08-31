@@ -120,22 +120,22 @@ get_object_contour()
 if(slope==0) line turn to red
 //object leave
 */
-
+Scalar MyLine_Color;
 void MyLine(Mat img){
     Point pCenter = Point(img.cols/2, img.rows/2);
 
     rectangle(img,
               Point(pCenter.x-50, pCenter.y-50),
               Point(pCenter.x+50, pCenter.y+50),
-              Scalar(0, 255, 0));
+              MyLine_Color);
     line(img,
          Point(pCenter.x-25, pCenter.y),
          Point(pCenter.x+25, pCenter.y),
-         Scalar(0, 255, 0));
+         MyLine_Color);
     line(img,
          Point(pCenter.x, pCenter.y-25),
          Point(pCenter.x, pCenter.y+25),
-         Scalar(0, 255, 0));
+         MyLine_Color);
 }
 
 void find_object_contours(Mat img){
@@ -164,9 +164,8 @@ void find_object_contours(Mat img){
                  CV_RETR_TREE,
                  CV_CHAIN_APPROX_SIMPLE);// retrieves external contours
 
-    /// Find the rotated rectangles and ellipses for each contour
+    /// Find the rotated rectangles for each contour
     vector<RotatedRect> minRect( contours.size() );
-    vector<RotatedRect> minEllipse( contours.size() );
 
     for( int i = 0; i < contours.size(); i++ )
         minRect[i] = minAreaRect( Mat(contours[i]) );
@@ -182,6 +181,11 @@ void find_object_contours(Mat img){
        Point2f rect_points[4]; minRect[i].points( rect_points );
        for( int j = 0; j < 4; j++ )
           line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1, 8 );
+        // Check if rotated rect is horizontal or not
+        float rect_slope = (rect_points[2].y - rect_points[1].y) /
+                            (rect_points[2].x - rect_points[1].x);
+        if(rect_slope * 100 == 0) MyLine_Color = Scalar(0, 0, 255);
+        else MyLine_Color = Scalar(0, 255, 0);
     }
 
     /// Show in a window
