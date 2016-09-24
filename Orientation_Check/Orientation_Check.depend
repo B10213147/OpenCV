@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1472537020 source:i:\orientation_check\main.cpp
+	<iostream>
+	<cv.hpp>
+
